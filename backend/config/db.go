@@ -3,7 +3,7 @@ package config
 import (
 	"fmt"
 
-	"gorm.io/driver/postgres"
+	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
@@ -15,10 +15,11 @@ func DatabaseInit() {
 	user := "root"
 	password := "password"
 	dbName := "app"
-	port := "5432"
+	port := "3306"
 
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbName=%s port=%s", host, user, password, dbName, port)
-	database, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+		user, password, host, port, dbName)
+	database, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {
 		panic(err)
